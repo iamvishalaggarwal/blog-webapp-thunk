@@ -72,7 +72,7 @@ const EditPost = () => {
         <select
           name="users"
           id="user"
-          onChange={(e) => setUserId(e.target.value)}
+          onChange={(e) => setUserId(+e.target.value)}
           defaultValue={userId}
         >
           {allUsers.map((user) => (

@@ -1,5 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+  nanoid,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 import { sub } from "date-fns";
 
@@ -165,7 +170,7 @@ const postsSlice = createSlice({
         if (!action.payload?.id) {
           console.log("Update could not complete.");
           console.log(action.payload);
-          return ;
+          return;
         }
         const { id } = action.payload;
         const posts = state.posts.filter((post) => post.id !== id);
@@ -182,6 +187,14 @@ export const getPostsError = (state) => state.posts.error;
 
 export const selectPostById = (state, postId) =>
   state.posts.posts.find((post) => post.id === postId);
+
+// as we need here selector that's why we need this 
+// createSelector - is a memoized selector
+// we can pass multiple param here
+export const selectPostsByUser = createSelector(
+  [selectAllPosts, (state, userId) => userId],
+  (posts, userId) => posts.filter((post) => post.userId === userId)
+);
 
 export const { postAdded, reactionAdded } = postsSlice.actions;
 
