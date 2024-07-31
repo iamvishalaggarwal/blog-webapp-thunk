@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { postAdded } from "./postsSlice";
 import { selectAllUsers } from "../users/usersSlice";
 import { createPost } from "./postsSlice";
+import { useNavigate } from "react-router-dom";
 // import { nanoid } from "@reduxjs/toolkit";
 
 const AddPostForm = () => {
@@ -11,10 +12,10 @@ const AddPostForm = () => {
   const [userId, setUserId] = useState(1);
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const allUsers = useSelector(selectAllUsers);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     try {
       e.preventDefault();
       // dispatch(
@@ -31,9 +32,10 @@ const AddPostForm = () => {
       // now we create the post using API
       setAddRequestStatus("pending");
       // we are unwrap() function to return the promise in RTK for return the action, and error if any.
-      dispatch(createPost({ title, body: content, userId })).unwrap();
+      await dispatch(createPost({ title, body: content, userId })).unwrap();
       setTitle("");
       setContent("");
+      navigate("/");
     } catch (error) {
       console.log("Error while saving post = ", error);
     } finally {
@@ -42,8 +44,11 @@ const AddPostForm = () => {
   };
 
   return (
-    <section>
-      <form onSubmit={submitHandler}>
+    <section style={{ display: "flex", justifyContent: "center" }}>
+      <form
+        onSubmit={submitHandler}
+        style={{ width: "60%", padding: "4rem", border: 0 }}
+      >
         <label htmlFor="title">Title: </label>
         <input
           type="text"

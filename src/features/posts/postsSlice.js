@@ -49,6 +49,25 @@ export const createPost = createAsyncThunk(
   }
 );
 
+export const updatePost = createAsyncThunk(
+  "posts/updatePost",
+  async (initialPost) => {
+    const { id } = initialPost;
+    const response = await axios.put(`${POSTS_URL}/${id}`, initialPost);
+    return response.data;
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  "posts/deletePost",
+  async (initialPost) => {
+    const { id } = initialPost;
+    const response = await axios.delete(`${POSTS_URL}/${id}`);
+    if (response?.status === 200) return initialPost;
+    return `${response?.status}: ${response?.statusText}`;
+  }
+);
+
 const postsSlice = createSlice({
   name: "posts",
   initialState,
@@ -129,6 +148,28 @@ const postsSlice = createSlice({
         };
         console.log(action.payload);
         state.posts.push(action.payload);
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log("Update could not complete.");
+          console.log(action.payload);
+          return;
+        }
+        const { id } = action.payload;
+        action.payload.date = new Date().toISOString();
+        // we are removing the prev post from payload and add the new one
+        const posts = state.posts.filter((post) => post.id !== id);
+        state.posts = [...posts, action.payload];
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log("Update could not complete.");
+          console.log(action.payload);
+          return ;
+        }
+        const { id } = action.payload;
+        const posts = state.posts.filter((post) => post.id !== id);
+        state.posts = posts;
       });
   },
 });
@@ -136,8 +177,11 @@ const postsSlice = createSlice({
 // we build this because if we change the state structure somehow, we need to make change in every component if we don't use this
 // but if we build this then we only need to make change here
 export const selectAllPosts = (state) => state.posts.posts;
-export const getPostsStatus = (state) => state.posts.status;
+export const getPostsStatus = (state) => state.posts.status; // state ke andar posts (slice name), and then iske andar status (initial state mai jo key ka name hai)
 export const getPostsError = (state) => state.posts.error;
+
+export const selectPostById = (state, postId) =>
+  state.posts.posts.find((post) => post.id === postId);
 
 export const { postAdded, reactionAdded } = postsSlice.actions;
 

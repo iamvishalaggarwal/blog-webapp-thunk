@@ -4,15 +4,12 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Arial", sans-serif;
-  background-color: #f5f5dc;
 }
 
 /* Body Styling */
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   color: #333;
+  background-color: #f5f5dc;
 }
 
 /* Header Styling */
@@ -30,6 +27,7 @@ article {
   margin-bottom: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 50%;
 }
 
 /* Form Styling */
@@ -53,7 +51,9 @@ form > textarea {
   font-size: 1rem;
 }
 
-form > button {
+form > button,
+.delete-btn,
+.edit-btn {
   padding: 10px 15px;
   border-radius: 25px;
   background-color: #ffdead;
@@ -79,4 +79,36 @@ form > button:hover {
 
 .reactionButton:hover {
   color: #6a0dad;
+}
+
+header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: purple;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  color: #f0e68c;
+}
+
+a {
+  color: #f5f5dc;
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+}
+
+ul > li {
+  padding: 1rem;
+}
+
+.postList {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
