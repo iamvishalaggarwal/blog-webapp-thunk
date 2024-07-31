@@ -23,3 +23,8 @@ Note:
 
 - the word 'thunk' is a programming term that means "a piece of code that does some delayed work"
 - used for writing standard async logic for redux
+
+## Optimisation -
+
+- we can use React.memo() for avoiding multiple re-renders of component
+- Normalization - using "createEntityAdapter()"
