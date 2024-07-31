@@ -6,8 +6,8 @@ const App = () => {
   return (
     <div>
       {/* <UsersList /> */}
-      <PostList />
       <AddPostForm />
+      <PostList />
     </div>
   );
 };

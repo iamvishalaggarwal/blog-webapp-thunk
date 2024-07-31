@@ -1,4 +1,4 @@
-# Redux
+# Redux & Redux Toolkit
 
 - redux is a core library
 - react-redux is an implementation of redux using react (used for wiring between react & redux)
@@ -18,3 +18,8 @@
 Note:
 
 - redux uses immer.js for handling immutable states functionality internally
+
+## Thunk - Redux Middleware
+
+- the word 'thunk' is a programming term that means "a piece of code that does some delayed work"
+- used for writing standard async logic for redux

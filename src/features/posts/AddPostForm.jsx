@@ -1,32 +1,44 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postAdded } from "./postsSlice";
+// import { postAdded } from "./postsSlice";
 import { selectAllUsers } from "../users/usersSlice";
+import { createPost } from "./postsSlice";
 // import { nanoid } from "@reduxjs/toolkit";
 
 const AddPostForm = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [userId, setUserId] = useState("0");
-
+  const [userId, setUserId] = useState(1);
+  const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const allUsers = useSelector(selectAllUsers);
 
   const dispatch = useDispatch();
 
   const submitHandler = (e) => {
-    e.preventDefault();
-    // dispatch(
-    //   postAdded({
-    //     id: nanoid(),
-    //     title,
-    //     content,
-    //   })
-    // );
+    try {
+      e.preventDefault();
+      // dispatch(
+      //   postAdded({
+      //     id: nanoid(),
+      //     title,
+      //     content,
+      //   })
+      // );
 
-    /* now we need to do this at slice part, simplified version */
-    dispatch(postAdded(title, content, userId));
-    setTitle("");
-    setContent("");
+      /* now we need to do this at slice part, simplified version */
+      // dispatch(postAdded(title, content, userId));
+
+      // now we create the post using API
+      setAddRequestStatus("pending");
+      // we are unwrap() function to return the promise in RTK for return the action, and error if any.
+      dispatch(createPost({ title, body: content, userId })).unwrap();
+      setTitle("");
+      setContent("");
+    } catch (error) {
+      console.log("Error while saving post = ", error);
+    } finally {
+      setAddRequestStatus("idle");
+    }
   };
 
   return (
@@ -62,7 +74,9 @@ const AddPostForm = () => {
           ))}
         </select>
 
-        <button type="submit">Save Post</button>
+        <button type="submit" disabled={addRequestStatus !== "idle"}>
+          Save Post
+        </button>
       </form>
     </section>
   );
